@@ -20,7 +20,7 @@ julia install_insarviz.jl
 ### Quick launch
 To start a development session and auto-load the environment:
 ```bash
-julia -t auto -i dev_startup.jl
+julia -i dev_startup.jl
 ```
 This will load some useful development tools such as Revise, BenchmarkTools, 
 etc., if installed in your base Julia environment.
@@ -66,17 +66,31 @@ Where, `<path-to-dir>` is the path to the directory that contains the data you
 would like to plot, and `<file-extension>` is the file' extension (e.g. ".int").
 
 ### Wrapped interferograms
-To visualize the amplitude and phase of wrapped interferograms, run:
+To save PNG images of the amplitude (`_amp.png`) and phase (`_phi.png`) to disk,
+run:
 ```bash
-julia> plot_wrp_igrams(files, width, length)
+julia> plot_wrp_igrams(files, wid, len)
 ```
-This will save PNG images of the amplitude (`_amp.png`) and phase (`_phi.png`)
-to disk, in the same folder as defined in `<path-to-dir>`
+Where `files` is the list of files to visualize, and `wid` and `len` are the
+width and length of the wrapped interferograms (in pixels).
 
 ### Unwrapped interferograms
-
+To save PNG images of the amplitude (`_amp.png`) and phase (`_psi.png`) to disk,
+run:
+```bash
+julia> plot_unw_igrams(files, wid, len)
+```
+Where `files` is the list of files to visualize, and `wid` and `len` are the
+width and length of the wrapped interferograms (in pixels).
 
 ### Surface deformation
-
+To save PNG images of the amplitude (`_amp.png`) and deformation (`_def.png`) to
+disk, run:
+```bash
+julia> plot_deformations(files, wid, len, min_def, max_def)
+```
+Where `files` is the list of files to visualize, `wid` and `len` are the
+width and length of the wrapped interferograms (in pixels), and `min_def` and
+`max_def` are the minimum and maximum deformations.
 
 ### Coherence
