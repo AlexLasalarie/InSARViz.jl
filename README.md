@@ -74,6 +74,15 @@ julia> plot_wrp_igrams(files, wid, len)
 Where `files` is the list of files to visualize, and `wid` and `len` are the
 width and length of the wrapped interferograms (in pixels).
 
+### Coherence
+To save PNG images of the amplitude (`_amp.png`) and coherence (`_coh.png`) to
+disk, run:
+```bash
+julia> plot_cohs(files, wid, len)
+```
+Where `files` is the list of files to visualize, `wid` and `len` are the
+width and length of the coherence maps (in pixels).
+
 ### Unwrapped interferograms
 To save PNG images of the amplitude (`_amp.png`) and phase (`_psi.png`) to disk,
 run:
@@ -87,10 +96,8 @@ width and length of the wrapped interferograms (in pixels).
 To save PNG images of the amplitude (`_amp.png`) and deformation (`_def.png`) to
 disk, run:
 ```bash
-julia> plot_deformations(files, wid, len, min_def, max_def)
+julia> plot_defs(files, wid, len, min_def, max_def)
 ```
 Where `files` is the list of files to visualize, `wid` and `len` are the
-width and length of the wrapped interferograms (in pixels), and `min_def` and
+width and length of the deformation maps (in pixels), and `min_def` and
 `max_def` are the minimum and maximum deformations.
-
-### Coherence

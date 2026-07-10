@@ -22,7 +22,8 @@ include("utils/wrap.jl")
 export make_list
 export plot_wrp_igrams
 export plot_unw_igrams
-export plot_deformations
+export plot_defs
+export plot_cohs
 
 # ----- Functions
 """
@@ -155,7 +156,7 @@ PNG images of the amplitude and unwrapped phase.
 # Notes
 Output naming convention:
 - <name>_amp.png: amplitude of the unwrapped interferogram
-- <name>_phi.png: phase of the unwrapped interferogram
+- <name>_psi.png: phase of the unwrapped interferogram
 """
 function plot_unw_igrams(
     file_paths::Vector{String},
@@ -200,7 +201,7 @@ function plot_unw_igrams(
 end
 
 """
-    plot_deformations(
+    plot_defs(
         file_paths::Vector{String},
         wid::Int,
         len::Int,
@@ -228,10 +229,10 @@ PNG images of the SAR amplitude and deformation.
 
 # Notes
 Output naming convention:
-- <name>_amp.png: amplitude of the unwrapped interferogram
-- <name>_phi.png: phase of the unwrapped interferogram
+- <name>_amp.png: SAR amplitude map
+- <name>_def.png: deformation map
 """
-function plot_deformations(
+function plot_defs(
     file_paths::Vector{String},
     wid::Int,
     len::Int,
@@ -268,6 +269,72 @@ function plot_deformations(
         path_def = base_path * "_def.png"
         save_img(amp, cmap_amp, min_amp, max_amp, path_amp)
         save_img(def, cmap_def, min_def, max_def, path_def)
+    end
+end
+
+"""
+    plot_cohs(
+        file_paths::Vector{String},
+        wid::Int,
+        len::Int;
+        min_quantile::Real=0.01,
+        max_quantile::Real=0.99
+    )
+
+Plot the `coherence` and `amplitude` of a list of coherence maps.
+
+# Positional Arguments
+- `file_paths`: `Vector{String}` list of coherence maps
+- `wid`: `Int` width of the coherence map (in pixels)
+- `len`: `Int` length of the coherence map (in pixels)
+
+# Optional Arguments
+- `min_quantile`: `Real` min amplitude quantile to clip to (default is `0.01`)
+- `max_quantile`: `Real` max amplitude quantile to clip to (default is `0.99`)
+
+# Returns
+PNG images of the interferogram amplitude and coherence.
+
+# Notes
+Output naming convention:
+- <name>_amp.png: amplitude of the interferogram
+- <name>_coh.png: coherence of the interferogram
+"""
+function plot_cohs(
+    file_paths::Vector{String},
+    wid::Int,
+    len::Int;
+    min_quantile::Real=0.01,
+    max_quantile::Real=0.99
+)
+    # Buffers
+    raw = Matrix{Float32}(undef, 2 * wid, len)
+    amp = Matrix{Float32}(undef, len, wid)
+    amp_vec = Vector{Float32}(undef, len * wid)
+    coh = Matrix{Float32}(undef, len, wid)
+
+    # Colormaps
+    cmap_coh = brew_coh()
+    cmap_amp = brew_gray()
+
+    # Process
+    for path in file_paths
+        # File I/O
+        println("Processing: $path")
+        read_unw_igram!(raw, amp, coh, path)
+
+        # Amplitude bounds
+        for (k, amp_k) in enumerate(amp)
+            amp_vec[k] = amp_k
+        end
+        min_amp, max_amp = quantile!(amp_vec, (min_quantile, max_quantile))
+
+        # Plot to disk
+        base_path, _ = splitext(path)
+        path_amp = base_path * "_amp.png"
+        path_coh = base_path * "_coh.png"
+        save_img(amp, cmap_amp, min_amp, max_amp, path_amp)
+        save_img(coh, cmap_coh, 0.0, 1.0, path_coh)
     end
 end
 
