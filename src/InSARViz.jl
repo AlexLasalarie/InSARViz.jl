@@ -14,6 +14,7 @@ include("fileio/read_wrp_igram.jl")
 include("fileio/read_unw_igram.jl")
 
 # Plotting utilities
+include("utils/interp.jl")
 include("utils/cmap.jl")
 include("utils/save_img.jl")
 include("utils/wrap.jl")

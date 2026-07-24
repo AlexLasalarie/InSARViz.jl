@@ -39,7 +39,12 @@ function brew_byr()
         116 173 209;
         69 117 180;
         49 54 149]
-    return cmap ./ 255.0
+    cmap_interp = hcat(
+        interp(cmap[:, 1], 255),
+        interp(cmap[:, 2], 255),
+        interp(cmap[:, 3], 255)
+    )
+    return cmap_interp ./ 255.0
 end
 
 # ----- Amplitude (gray)
