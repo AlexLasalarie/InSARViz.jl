@@ -24,14 +24,6 @@ catch e
     @warn "BenchmarkTools not found. Consider adding to your base environment."
 end
 
-# Load GLMakie (for plotting)
-try
-    using GLMakie
-    println("GLMakie loaded")
-catch e
-    @warn "GLMakie not found. Consider adding to your base environment."
-end
-
 # Load Infiltrator (breakpoints)
 try
     using Infiltrator
