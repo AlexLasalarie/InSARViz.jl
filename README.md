@@ -1,9 +1,23 @@
 # InSARViz.jl
 
 ## Overview
-InSARViz.jl is a Julia package for visualizing InSAR data.
+InSARViz.jl is a Julia package for visualizing InSAR data. Use it to plot
+amplitude, wrapped and unwrapped phase, coherence, and deformation.
+
+## Data format
+InSARViz expects raw binary interferograms in the standard **ISCE**-compatible 
+formats:
+- **Wrapped interferograms:** Complex 32-bit floating-point data (`ComplexF32`)
+- **Unwrapped interferograms, deformation, and coherence maps:** 
+32-bit floating-point data (`Float32`) with 2 bands
+   - **Band 1:** Amplitude (or correlation).
+   - **Band 2:** Wrapped/unwrapped phase, deformation, or coherence, depending 
+   on the input data.
 
 ## Get started
+
+### Install Julia
+If you do not already have Julia installed, follow the official [Julia installation instructions](https://julialang.org/downloads/).
 
 ### Clone the repository
 Navigate to the desired directory and run:
@@ -22,7 +36,7 @@ To start a development session and auto-load the environment:
 ```bash
 julia -i dev_startup.jl
 ```
-This will load some useful development tools such as Revise, BenchmarkTools, 
+This will load some useful development tools such as `Revise`, `BenchmarkTools`, 
 etc., if installed in your base Julia environment.
 
 ### Manual launch
@@ -69,7 +83,7 @@ would like to plot, and `<file-extension>` is the file' extension (e.g. ".int").
 To save PNG images of the amplitude (`_amp.png`) and phase (`_phi.png`) to disk,
 run:
 ```bash
-julia> plot_wrp_igrams(files, wid, len)
+julia> plot_wrp_igrams(files, wid, len, plot_amp=true)
 ```
 Where `files` is the list of files to visualize, and `wid` and `len` are the
 width and length of the wrapped interferograms (in pixels).
@@ -78,7 +92,7 @@ width and length of the wrapped interferograms (in pixels).
 To save PNG images of the amplitude (`_amp.png`) and coherence (`_coh.png`) to
 disk, run:
 ```bash
-julia> plot_cohs(files, wid, len)
+julia> plot_cohs(files, wid, len, plot_amp=true)
 ```
 Where `files` is the list of files to visualize, `wid` and `len` are the
 width and length of the coherence maps (in pixels).
@@ -87,7 +101,7 @@ width and length of the coherence maps (in pixels).
 To save PNG images of the amplitude (`_amp.png`) and phase (`_psi.png`) to disk,
 run:
 ```bash
-julia> plot_unw_igrams(files, wid, len)
+julia> plot_unw_igrams(files, wid, len, plot_amp=true)
 ```
 Where `files` is the list of files to visualize, and `wid` and `len` are the
 width and length of the wrapped interferograms (in pixels).
@@ -96,7 +110,7 @@ width and length of the wrapped interferograms (in pixels).
 To save PNG images of the amplitude (`_amp.png`) and deformation (`_def.png`) to
 disk, run:
 ```bash
-julia> plot_defs(files, wid, len, min_def, max_def)
+julia> plot_defs(files, wid, len, min_def, max_def, plot_amp=true)
 ```
 Where `files` is the list of files to visualize, `wid` and `len` are the
 width and length of the deformation maps (in pixels), and `min_def` and

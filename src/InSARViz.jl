@@ -62,13 +62,14 @@ end
     file_paths::Vector{String},
     wid::Int,
     len::Int;
+    plot_amp::Bool=false,
     mask::Bool=false,
     min_quantile::Real=0.01,
     max_quantile::Real=0.99
 )
 
-Plot the `phase` and `amplitude` of a list of wrapped interferograms as `.png`
-images.
+Plot the `phase` and `amplitude` (optional) of a list of wrapped interferograms 
+as `.png` images.
 
 # Positional Arguments
 - `file_paths`: `Vector{String}` listed of wrapped interferograms
@@ -76,12 +77,13 @@ images.
 - `len`: `Int` length of the wrapped interferograms (in pixels)
 
 # Optional Arguments
+- `plot_amp`: `Bool` set to `true` to plot the amplitude (default is `false`)
 - `mask`: `Bool` mask pixels with value of zero if `true` (default is `false`)
 - `min_quantile`: `Real` min amplitude quantile to clip to (default is `0.01`)
 - `max_quantile`: `Real` max amplitude quantile to clip to (default is `0.99`)
 
 # Returns
-PNG images of the amplitude and wrapped phase.
+PNG images of the amplitude (optional) and wrapped phase.
 
 # Notes
 Output naming convention:
@@ -92,6 +94,7 @@ function plot_wrp_igrams(
     file_paths::Vector{String},
     wid::Int,
     len::Int;
+    plot_amp::Bool=false,
     mask::Bool=false,
     min_quantile::Real=0.01,
     max_quantile::Real=0.99
@@ -124,10 +127,12 @@ function plot_wrp_igrams(
 
         # Plot to disk
         base_path, _ = splitext(path)
-        path_amp = base_path * "_amp.png"
         path_phi = base_path * "_phi.png"
-        save_img(amp, cmap_amp, min_amp, max_amp, path_amp, mask=mask)
         save_img(phi, cmap_phi, -pi, pi, path_phi, mask=mask)
+        if plot_amp
+            path_amp = base_path * "_amp.png"
+            save_img(amp, cmap_amp, min_amp, max_amp, path_amp, mask=mask)
+        end
     end
 end
 
@@ -136,14 +141,15 @@ end
         file_paths::Vector{String},
         wid::Int,
         len::Int;
+        plot_amp::Bool=false,
         mask::Bool=false,
         wrap_val::Real=10,
         min_quantile::Real=0.01,
         max_quantile::Real=0.99
     )
 
-Plot the `phase` and `amplitude` of a list of unwrapped interferograms as `.png`
-images.
+Plot the `phase` and `amplitude` (optional) of a list of unwrapped 
+interferograms as `.png` images.
 
 # Positional Arguments
 - `file_paths`: `Vector{String}` listed of unwrapped interferograms
@@ -151,13 +157,14 @@ images.
 - `len`: `Int` length of the unwrapped interferograms (in pixels)
 
 # Optional Arguments
+- `plot_amp`: `Bool` set to `true` to plot the amplitude (default is `false`)
 - `mask`: `Bool` mask pixels with value of zero if `true` (default is `false`)
 - `wrap_val`: `Real` value to wrap the phase to as `[-val/2.0, val/2.0]`
 - `min_quantile`: `Real` min amplitude quantile to clip to (default is `0.01`)
 - `max_quantile`: `Real` max amplitude quantile to clip to (default is `0.99`)
 
 # Returns
-PNG images of the amplitude and unwrapped phase.
+PNG images of the amplitude (optional) and unwrapped phase.
 
 # Notes
 Output naming convention:
@@ -168,6 +175,7 @@ function plot_unw_igrams(
     file_paths::Vector{String},
     wid::Int,
     len::Int;
+    plot_amp::Bool=false,
     mask::Bool=false,
     wrap_val::Real=10,
     min_quantile::Real=0.01,
@@ -200,10 +208,12 @@ function plot_unw_igrams(
 
         # Plot to disk
         base_path, _ = splitext(path)
-        path_amp = base_path * "_amp.png"
         path_psi = base_path * "_psi.png"
-        save_img(amp, cmap_amp, min_amp, max_amp, path_amp, mask=mask)
         save_img(psi, cmap_psi, -wrap_val / 2.0, wrap_val / 2.0, path_psi, mask=mask)
+        if plot_amp
+            path_amp = base_path * "_amp.png"
+            save_img(amp, cmap_amp, min_amp, max_amp, path_amp, mask=mask)
+        end
     end
 end
 
@@ -214,12 +224,14 @@ end
         len::Int,
         min_def::Real,
         max_def::Real;
+        plot_amp::Bool=false,
         mask::Bool=false,
         min_quantile::Real=0.01,
         max_quantile::Real=0.99
     )
 
-Plot the `deformation` and `SAR amplitude` of a list of deformation maps.
+Plot the `deformation` and `SAR amplitude` (optional) of a list of deformation 
+maps.
 
 # Positional Arguments
 - `file_paths`: `Vector{String}` listed of deformation maps
@@ -229,12 +241,13 @@ Plot the `deformation` and `SAR amplitude` of a list of deformation maps.
 - `max_def`: `Real` upper bound of deformation color bar
 
 # Optional Arguments
+- `plot_amp`: `Bool` set to `true` to plot the amplitude (default is `false`)
 - `mask`: `Bool` mask pixels with value of zero if `true` (default is `false`)
 - `min_quantile`: `Real` min amplitude quantile to clip to (default is `0.01`)
 - `max_quantile`: `Real` max amplitude quantile to clip to (default is `0.99`)
 
 # Returns
-PNG images of the SAR amplitude and deformation.
+PNG images of the SAR amplitude (optional) and deformation.
 
 # Notes
 Output naming convention:
@@ -247,6 +260,7 @@ function plot_defs(
     len::Int,
     min_def::Real,
     max_def::Real;
+    plot_amp::Bool=false,
     mask::Bool=false,
     min_quantile::Real=0.01,
     max_quantile::Real=0.99
@@ -275,10 +289,12 @@ function plot_defs(
 
         # Plot to disk
         base_path, _ = splitext(path)
-        path_amp = base_path * "_amp.png"
         path_def = base_path * "_def.png"
-        save_img(amp, cmap_amp, min_amp, max_amp, path_amp, mask=mask)
         save_img(def, cmap_def, min_def, max_def, path_def, mask=mask)
+        if plot_amp
+            path_amp = base_path * "_amp.png"
+            save_img(amp, cmap_amp, min_amp, max_amp, path_amp, mask=mask)
+        end
     end
 end
 
@@ -287,6 +303,7 @@ end
         file_paths::Vector{String},
         wid::Int,
         len::Int;
+        plot_amp::Bool=false,
         mask::Bool=false,
         min_quantile::Real=0.01,
         max_quantile::Real=0.99
@@ -300,12 +317,13 @@ Plot the `coherence` and `amplitude` of a list of coherence maps.
 - `len`: `Int` length of the coherence map (in pixels)
 
 # Optional Arguments
+- `plot_amp`: `Bool` set to `true` to plot the amplitude (default is `false`)
 - `mask`: `Bool` mask pixels with value of zero if `true` (default is `false`)
 - `min_quantile`: `Real` min amplitude quantile to clip to (default is `0.01`)
 - `max_quantile`: `Real` max amplitude quantile to clip to (default is `0.99`)
 
 # Returns
-PNG images of the interferogram amplitude and coherence.
+PNG images of the interferogram amplitude (optional) and coherence.
 
 # Notes
 Output naming convention:
@@ -316,6 +334,7 @@ function plot_cohs(
     file_paths::Vector{String},
     wid::Int,
     len::Int;
+    plot_amp::Bool=false,
     mask::Bool=false,
     min_quantile::Real=0.01,
     max_quantile::Real=0.99
@@ -344,11 +363,12 @@ function plot_cohs(
 
         # Plot to disk
         base_path, _ = splitext(path)
-        path_amp = base_path * "_amp.png"
         path_coh = base_path * "_coh.png"
-        save_img(amp, cmap_amp, min_amp, max_amp, path_amp, mask=mask)
         save_img(coh, cmap_coh, 0.0, 1.0, path_coh, mask=mask)
+        if plot_amp
+            path_amp = base_path * "_amp.png"
+            save_img(amp, cmap_amp, min_amp, max_amp, path_amp, mask=mask)
+        end
     end
 end
-
 end
